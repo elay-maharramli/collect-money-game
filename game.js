@@ -136,7 +136,7 @@ class Game
             const moneyCenterY = money.y + money.h;
             if (
                 moneyCenterX >= this.player.x &&
-                moneyCenterX <= this.player.x + this.player.w &&
+                money.x <= this.player.x + this.player.w &&
                 moneyCenterY >= this.player.y &&
                 moneyCenterY <= this.player.y + this.player.h
             ){
