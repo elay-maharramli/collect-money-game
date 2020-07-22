@@ -25,9 +25,11 @@ class Player
         this.x = x;
         this.y = y;
         this.w = 109;
-        this.h = 120;
+        this.h = 167;
         this.dx = dx;
         this.ctx = context;
+        this.img = new Image();
+        this.img.src = 'img/player.png';
     }
 
     update()
@@ -36,9 +38,11 @@ class Player
 
     draw()
     {
-        ctx.clearRect(0,0,800,600);
-        this.ctx.fillStyle = "rgb(0,0,0)"
-        this.ctx.fillRect(this.x, this.y, this.w, this.h);
+        this.ctx.drawImage(
+            this.img,
+            this.x, this.y,
+            this.w, this.h
+        )
     }
 }
 
@@ -72,10 +76,12 @@ class Money {
     constructor(x, y, dy, context) {
         this.x = x;
         this.y = y;
-        this.w = 50;
-        this.h = 50;
+        this.w = 70;
+        this.h = 34;
         this.dy = dy;
         this.ctx = context;
+        this.img = new Image();
+        this.img.src = 'img/dollar.png';
     }
 
     update()
@@ -84,8 +90,11 @@ class Money {
     }
 
     draw() {
-        this.ctx.fillStyle = "rgb(0,255,0)";
-        this.ctx.fillRect(this.x, this.y, this.w, this.h);
+        this.ctx.drawImage(
+            this.img,
+            this.x, this.y,
+            this.w, this.h
+        )
     }
 }
 
@@ -93,7 +102,7 @@ class Game
 {
     constructor(context, event) {
         this.ctx = context;
-        this.player = new Player(50, 450, 7, ctx);
+        this.player = new Player(50, 410, 7, ctx);
         this.money = new Money(2000, 30, 3, this.ctx);
         this.scoreimg = new Score(20,20,this.ctx);
         this.moneys = [];
@@ -164,6 +173,7 @@ class Game
 
     draw()
     {
+        this.ctx.clearRect(0,0,800,600);
         this.player.draw();
         this.money.draw();
         this.scoreimg.draw();
