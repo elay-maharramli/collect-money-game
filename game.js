@@ -36,6 +36,7 @@ class Player
 
     draw()
     {
+        ctx.clearRect(0,0,800,600);
         this.ctx.fillStyle = "rgb(0,0,0)"
         this.ctx.fillRect(this.x, this.y, this.w, this.h);
     }
@@ -90,15 +91,17 @@ class Money {
 
 class Game
 {
-    constructor(context) {
+    constructor(context, event) {
         this.ctx = context;
-        this.player = new Player(50, 450, 10, ctx);
+        this.player = new Player(50, 450, 7, ctx);
         this.money = new Money(2000, 30, 3, this.ctx);
         this.scoreimg = new Score(20,20,this.ctx);
         this.moneys = [];
         this.moneySpawnInterval = 500;
         this.moneyTimer = 1;
         this.score = 0;
+        this.keyStates = {};
+        this.keyboardListen();
         this.loop();
     }
 
@@ -113,6 +116,7 @@ class Game
     {
         this.player.update();
         this.money.update();
+        this.handleInput();
         this.scoreimg.update();
         if (this.moneyTimer % this.moneySpawnInterval === 0)
         {
@@ -140,7 +144,6 @@ class Game
                 moneyCenterY >= this.player.y &&
                 moneyCenterY <= this.player.y + this.player.h
             ){
-               ctx.clearRect(0,0,800,600);
                Helper.removeIndex(this.moneys, index);
                this._scoreUpdate();
             }
@@ -149,6 +152,14 @@ class Game
             money.update();
         });
 
+        if (this.player.x >= 800 - this.player.w)
+        {
+            this.player.x -= this.player.dx;
+        }
+        if (this.player.x <= 0)
+        {
+            this.player.x += this.player.dx;
+        }
     }
 
     draw()
@@ -159,10 +170,38 @@ class Game
         for (let i in this.moneys)
         {
             if (this.moneys.hasOwnProperty(i))
-                ctx.clearRect(0,0,800,600);
-                this.player.draw();
                 this.scoreimg.draw();
                 this.moneys[i].draw();
+        }
+    }
+
+    keyboardListen()
+    {
+        document.addEventListener('keydown', (e) =>
+        {
+            this.setKeyState(true, e);
+        });
+        document.addEventListener('keyup', (e) =>
+        {
+            this.setKeyState(false, e);
+        });
+    }
+
+    setKeyState(keydown, e)
+    {
+        this.keyStates[e.keyCode] = keydown;
+    }
+
+    handleInput()
+    {
+        if (this.keyStates[37])
+        {
+            this.player.x -= this.player.dx;
+        }
+
+        if (this.keyStates[39])
+        {
+            this.player.x += this.player.dx;
         }
     }
 
@@ -173,23 +212,7 @@ class Game
 
 }
 
-document.addEventListener("keydown", keyPush);
 
-function keyPush() {
-    if (event.keyCode === 37){
-        ctx.clearRect(0,0,800,600);
-        game.player.x -= game.player.dx;
-        game.player.update();
-        game.player.draw();
-    }
-
-    if (event.keyCode === 39){
-        ctx.clearRect(0,0,800,600);
-        game.player.x += game.player.dx;
-        game.player.update();
-        game.player.draw();
-    }
-}
 
 
 
